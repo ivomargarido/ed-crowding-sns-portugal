@@ -7,6 +7,9 @@ https://transparencia.sns.gov.pt/explore/dataset/monitorizacao-sazonal-csh/
 
 Dataset identifier: monitorizacao-sazonal-csh
 
+Data de extração: 2026-05-11  
+Ficheiro local: data/raw/monitorizacao_sazonal_csh_raw.csv
+
 ### Atividade nos Cuidados Saúde Hospitalares — Monitorização Sazonal
 
 Fonte: Portal da Transparência do SNS
