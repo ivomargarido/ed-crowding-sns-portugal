@@ -2,6 +2,11 @@
 
 ## Fonte principal
 
+Atividade nos Cuidados Saúde Hospitalares — Monitorização Sazonal  
+https://transparencia.sns.gov.pt/explore/dataset/monitorizacao-sazonal-csh/
+
+Dataset identifier: monitorizacao-sazonal-csh
+
 ### Atividade nos Cuidados Saúde Hospitalares — Monitorização Sazonal
 
 Fonte: Portal da Transparência do SNS
@@ -24,6 +29,17 @@ Notas metodológicas:
 ---
 
 ## Fontes complementares
+
+Atendimentos por Tipo de Urgência Hospitalar  
+https://transparencia.sns.gov.pt/explore/dataset/atendimentos-por-tipo-de-urgencia-hospitalar-link/
+
+Dataset identifier: atendimentos-por-tipo-de-urgencia-hospitalar-link
+
+Atendimentos em Urgência Hospitalar por Triagem de Manchester  
+https://transparencia.sns.gov.pt/explore/dataset/atendimentos-em-urgencia-triagem-manchester/
+
+Dataset identifier: atendimentos-em-urgencia-triagem-manchester
+
 
 ### Atendimentos por Tipo de Urgência Hospitalar
 
