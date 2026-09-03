@@ -1,0 +1,5 @@
+indicador,ars_maior_valor,maior_valor,ars_menor_valor,menor_valor,diferenca_absoluta,diferenca_percentual_face_menor
+Média diária de episódios de urgência,ARS Norte,5980.5,ARS Algarve,849.1,5131.4,604.3
+Tempo médio de espera,ARS Lisboa e Vale do Tejo,77.6,ARS Alentejo,38.9,38.6,99.1
+Taxa média de internamento,ARS Algarve,12.5,ARS Norte,8.7,3.9,44.8
+Taxa diária média de prioridade verde/azul por 100.000 residentes,ARS Lisboa e Vale do Tejo,46.7,ARS Centro,36.3,10.4,28.7
