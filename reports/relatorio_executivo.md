@@ -1,78 +1,169 @@
-# Relatório executivo  
-## Análise exploratória da pressão assistencial nas urgências hospitalares do SNS
+# Relatório executivo — Pressão assistencial nas urgências do SNS em Portugal
 
 ## Enquadramento
 
-Este projeto analisou indicadores públicos de urgência hospitalar em Portugal Continental, com o objetivo de identificar padrões temporais e regionais associados à pressão assistencial nos serviços de urgência.
+Este projeto analisa dados públicos agregados sobre a atividade dos serviços de urgência hospitalar do Serviço Nacional de Saúde em Portugal Continental.
 
-A análise foi realizada com dados públicos agregados do Portal da Transparência do SNS, no âmbito de um projeto de portefólio em Health Data Science.
+O objetivo é monitorizar indicadores de pressão assistencial nas urgências e testar uma primeira abordagem preditiva para o tempo médio diário de espera entre a triagem e a primeira observação médica.
 
-O objetivo não foi avaliar desempenho clínico, qualidade assistencial ou decisões individuais, mas sim demonstrar como dados públicos podem ser utilizados para monitorizar sinais de pressão assistencial e apoiar análises operacionais futuras.
+O projeto não utiliza dados individuais de utentes, profissionais ou episódios clínicos identificáveis.
 
-## Pergunta de análise
+---
 
-Como evolui a pressão assistencial nos serviços de urgência hospitalar do SNS em Portugal Continental e que indicadores públicos permitem monitorizar padrões de congestionamento ao longo do tempo e entre regiões?
+## Fonte dos dados
 
-## Indicadores analisados
+Os dados têm origem no Portal da Transparência do SNS, no conjunto:
 
-Foram analisados quatro indicadores principais:
+**Atividade nos Cuidados Saúde Hospitalares — Monitorização Sazonal**
+
+Foram analisados indicadores diários por região/ARS e para Portugal Continental:
 
 - número estimado de episódios de urgência;
-- tempo médio de espera entre a triagem e a primeira observação médica;
+- atendimentos urgentes com prioridade verde ou azul por 100.000 residentes;
 - taxa diária de atendimentos urgentes com internamento;
-- taxa diária de atendimentos urgentes com prioridade verde ou azul, expressa em episódios urgentes por 100.000 residentes.
+- tempo médio de espera entre a triagem e a primeira observação médica.
 
-## Metodologia
+O período analisado decorre entre **2016-11-01 e 2026-05-09**.
 
-A análise seguiu um fluxo estruturado:
+---
 
-1. compreensão inicial dos dados;
-2. avaliação da qualidade e cobertura temporal;
-3. preparação da tabela analítica;
-4. separação entre análise nacional e regional;
-5. análise exploratória temporal;
-6. comparação regional dos principais indicadores;
-7. síntese dos achados;
-8. identificação de limitações e próximos passos.
+## Projeto 1 — Monitorização da pressão assistencial
 
-As comparações anuais foram restringidas aos anos classificados como completos, reduzindo o risco de interpretações enviesadas por anos parciais ou falhas pontuais nos dados.
+A primeira fase consistiu na preparação, validação e análise exploratória dos dados.
 
-## Principais achados
+Foram criadas tabelas analíticas nacionais e regionais a partir do ficheiro original em formato longo. Foram também identificadas falhas de cobertura temporal, incluindo quatro datas em falta na série nacional em fevereiro de 2025.
 
-Entre os anos completos, 2019 apresentou a maior média diária de episódios de urgência em Portugal Continental, enquanto 2020 apresentou a menor média diária.
+### Principais achados
 
-Apesar da redução no volume de episódios em 2020, esse ano apresentou a maior taxa média de internamento entre os anos completos analisados, sugerindo uma alteração no perfil dos episódios atendidos.
+A análise mostrou variações relevantes na atividade das urgências ao longo do tempo.
 
-O tempo médio de espera revelou-se um dos indicadores mais relevantes para monitorizar sinais de pressão assistencial. Entre os anos completos, o maior tempo médio anual foi observado em 2024.
+Entre os anos completos, **2019 apresentou a maior média diária de episódios de urgência**, enquanto **2020 apresentou uma quebra acentuada** face ao ano anterior.
 
-Na comparação regional, a ARS Norte apresentou o maior volume médio diário de episódios de urgência. Este resultado deve ser interpretado como volume absoluto de atividade, não ajustado à população servida, número de hospitais ou capacidade instalada.
+O **tempo médio de espera aumentou nos anos mais recentes**, com **2024 a apresentar o maior valor médio anual entre os anos completos**.
 
-A ARS Lisboa e Vale do Tejo destacou-se pelo maior tempo médio de espera e também pelo maior valor médio da taxa diária de episódios com prioridade verde ou azul por 100.000 residentes.
+A comparação regional mostrou diferenças importantes entre regiões:
 
-A ARS Algarve apresentou a maior taxa média de internamento, embora este resultado deva ser interpretado com cautela devido às limitações de cobertura identificadas para esta região em alguns indicadores.
+- a **ARS Norte** apresentou a maior média diária de episódios de urgência;
+- a **ARS Lisboa e Vale do Tejo** apresentou o maior tempo médio de espera;
+- a **ARS Algarve** apresentou a maior taxa de internamento;
+- a **ARS Lisboa e Vale do Tejo** apresentou o maior valor do indicador de prioridade verde ou azul.
 
-## Valor analítico do projeto
+Estes resultados sugerem que a pressão assistencial não se distribui de forma homogénea no território.
 
-Este projeto demonstra a capacidade de transformar dados públicos agregados numa análise estruturada, documentada e reutilizável.
+---
 
-Foram produzidos outputs em formato de notebook, gráficos e tabelas, permitindo que os resultados sejam reutilizados em relatório, dashboard ou análises posteriores.
+## Projeto 2 — Previsão do tempo médio de espera
 
-A análise permite identificar períodos e regiões com sinais mais marcados de pressão assistencial, funcionando como ponto de partida para investigação operacional mais detalhada.
+A segunda fase desenvolveu uma primeira prova de conceito preditiva para estimar o tempo médio diário de espera em Portugal Continental.
+
+Foram criadas variáveis explicativas de calendário, lags e médias móveis, utilizando apenas informação histórica para evitar fuga de informação temporal.
+
+A divisão treino/teste respeitou a ordem cronológica:
+
+| Conjunto | Período | Observações |
+|---|---|---:|
+| Treino | 2016-11-29 a 2024-12-31 | 2955 |
+| Teste | 2025-01-01 a 2026-05-09 | 462 |
+
+Foram avaliados modelos baseline e modelos supervisionados de regressão.
+
+### Resultados dos modelos
+
+| Modelo | MAE | RMSE |
+|---|---:|---:|
+| Regressão linear | 4,43 | 6,05 |
+| Ridge Regression | 4,59 | 6,25 |
+| Random Forest | 4,65 | 6,33 |
+| Baseline média 7 dias | 6,01 | 7,86 |
+| Baseline dia anterior | 6,23 | 7,94 |
+| Baseline semana anterior | 6,47 | 9,03 |
+
+O melhor modelo foi a **regressão linear**, com:
+
+- **MAE:** 4,431 minutos;
+- **RMSE:** 6,050 minutos;
+- **melhoria de 26,3% no MAE** face ao melhor baseline;
+- **melhoria de 23,0% no RMSE** face ao melhor baseline.
+
+A análise dos coeficientes mostrou que o principal sinal preditivo está no histórico recente do próprio tempo médio de espera, sobretudo nas médias móveis e nos valores observados em dias anteriores.
+
+---
+
+## Dias de maior pressão
+
+Foi feita uma análise específica dos dias de maior pressão, definidos como dias do conjunto de teste com tempo médio de espera igual ou superior ao percentil 90 observado no treino.
+
+| Modelo | MAE picos | RMSE picos |
+|---|---:|---:|
+| Regressão linear | 9,82 | 12,77 |
+| Random Forest | 10,59 | 13,93 |
+
+A regressão linear manteve melhor desempenho também nos dias de pico.
+
+Ainda assim, os erros aumentaram nestes períodos, mostrando que a previsão de valores extremos continua a ser uma limitação relevante.
+
+---
+
+## Conclusões principais
+
+Os dados públicos agregados do SNS permitem monitorizar padrões de pressão assistencial nas urgências hospitalares e identificar diferenças temporais e regionais relevantes.
+
+A análise exploratória confirmou variações importantes no volume de episódios, tempo médio de espera, taxa de internamento e prioridade verde ou azul.
+
+A prova de conceito preditiva mostrou que é possível estimar o tempo médio diário de espera com erro médio absoluto de aproximadamente **4,4 minutos**, melhorando claramente face a baselines simples.
+
+Apesar do bom desempenho global, o modelo ainda tem dificuldade em prever picos abruptos de tempo de espera, que são precisamente os períodos de maior relevância operacional.
+
+---
 
 ## Limitações
 
-A análise utiliza dados públicos e agregados. Não existe informação ao nível do episódio individual, hospital, equipa clínica ou percurso completo do utente.
+Este projeto utiliza dados públicos agregados, o que limita a profundidade da análise.
 
-Os resultados não permitem estabelecer causalidade, avaliar decisões clínicas individuais, medir diretamente qualidade assistencial ou definir prioridades automáticas de investimento.
+As principais limitações são:
 
-A comparação regional não está ajustada à população servida, número de hospitais, recursos humanos, camas disponíveis, capacidade instalada ou organização dos fluxos assistenciais.
+- ausência de dados individuais de utentes;
+- ausência de variáveis clínicas detalhadas;
+- ausência de informação operacional sobre equipas, camas, lotação ou recursos disponíveis;
+- impossibilidade de inferir causalidade;
+- existência de algumas falhas temporais nos dados;
+- modelos ainda não validados para utilização operacional.
 
-Foram também identificadas limitações de cobertura temporal, incluindo anos parciais, falhas pontuais e menor cobertura da ARS Algarve em alguns indicadores.
+---
 
-## Conclusão
+## Valor do projeto
 
-Os indicadores públicos analisados permitem construir uma leitura estruturada da pressão assistencial nas urgências hospitalares do SNS.
+Este projeto demonstra um fluxo aplicado de Health Data Science com dados públicos:
 
-Embora a análise seja exploratória e descritiva, permite identificar padrões relevantes na evolução temporal e regional dos indicadores, contribuindo para uma base analítica que pode ser aprofundada com dados mais granulares e contextuais.
+- preparação e validação de dados;
+- análise exploratória;
+- criação de indicadores;
+- comparação temporal e regional;
+- engenharia de variáveis temporais;
+- construção de modelos baseline;
+- modelação supervisionada;
+- avaliação de desempenho;
+- análise de erros;
+- seleção fundamentada de modelo.
 
-O projeto demonstra competências em preparação de dados, validação de qualidade, análise exploratória, visualização, interpretação crítica e comunicação de resultados em contexto de saúde.
+---
+
+## Próximos passos
+
+Os próximos desenvolvimentos previstos são:
+
+1. desenvolver um modelo de classificação para identificar dias de urgência congestionada;
+2. construir um dashboard interativo com os principais indicadores;
+3. explorar abordagens específicas para previsão ou deteção de picos;
+4. aprofundar a análise regional;
+5. avaliar novas variáveis explicativas, caso estejam disponíveis.
+
+---
+
+## Nota ética
+
+Este projeto utiliza apenas dados públicos agregados.
+
+Não são utilizados dados individuais de utentes, profissionais de saúde ou episódios clínicos identificáveis.
+
+Os resultados devem ser interpretados como análise exploratória e prova de conceito em Health Data Science, não como ferramenta clínica ou institucional validada.
